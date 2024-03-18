@@ -14,6 +14,14 @@ public class TileManager : MonoSingleton<TileManager>
         GenerateTileData();
     }
 
+    public Tile SpawnTile(int value)
+    {
+        var tile = tilePool.GetTile();
+        tile.AssignData(tileData[value]);
+        return tile;
+    }
+
+
     public void GenerateTileData()
     {
         int dataCap = 80;

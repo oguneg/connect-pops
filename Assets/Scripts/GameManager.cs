@@ -18,8 +18,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         FetchGameSettings();
         FetchGameData();
-        gridManager.Initialize();
         tileManager.Initialize(gameSettings.colorPallette);
+        gridManager.Initialize(gameData);
         inputHandler.Initialize();
     }
 
@@ -33,7 +33,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (DataHandler.IsNewPlayer)
         {
             GenerateRandomNewGameData();
-            //DataHandler.IsNewPlayer = false;
+            DataHandler.IsNewPlayer = false;
         }
         else
         {
@@ -50,8 +50,9 @@ public class GameManager : MonoSingleton<GameManager>
         gameData = new int[slotCount];
         for (int i = 0; i < slotCount; i++)
         {
-            gameData[i] = Random.Range(0, 3);
+            gameData[i] = Random.Range(0, 26);
         }
+        DataHandler.SaveGameData(gameData);
     }
 
     private void FetchGameSettings()

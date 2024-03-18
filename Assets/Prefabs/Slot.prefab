@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ce63b98b205b04b8af7ae58271848b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tile: {fileID: 0}
 --- !u!1 &5461889016468836710
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +62,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3509966864221619175
 Transform:
   m_ObjectHideFlags: 0
