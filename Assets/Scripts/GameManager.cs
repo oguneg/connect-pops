@@ -16,6 +16,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
         FetchGameSettings();
         FetchGameData();
         tileManager.Initialize(gameSettings.colorPallette);

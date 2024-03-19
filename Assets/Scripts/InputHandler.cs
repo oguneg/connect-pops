@@ -7,6 +7,7 @@ public class InputHandler : MonoSingleton<InputHandler>
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private Transform clickIndicator;
+    [SerializeField] private SelectionHandler selectionHandler;
     private Slot lastSelectedSlot;
     private bool isDragging;
     private TileManager tileManager;
@@ -40,32 +41,30 @@ public class InputHandler : MonoSingleton<InputHandler>
 
     private void StartSelection()
     {
-        Debug.LogError("hey");
         var slot = Detect();
         if (slot != null)
         {
-        Debug.LogError("hoo");
             isDragging = true;
-            slot.Select();
+            lastSelectedSlot = slot;
+            selectionHandler.Select(slot);
         }
-        
     }
 
     private void Drag()
     {
-        Debug.LogError("nej");
         var slot = Detect();
         if (slot != null)
         {
-        Debug.LogError("noo");
-            slot.Select();
+            if(selectionHandler.lastSelection.IsNeighborOf(slot.Pos))
+            selectionHandler.Select(slot);
+            //slot.Select();
         }
-        
     }
 
     private void EndSelection()
     {
         //tileManager.FingerUp();
+        selectionHandler.EndSelection();
     }
 
     private Slot Detect()
@@ -80,7 +79,7 @@ public class InputHandler : MonoSingleton<InputHandler>
             var indicatorPos = mainCamera.ScreenToWorldPoint(pos);
             indicatorPos.z = 0;
             clickIndicator.position = indicatorPos;
-            //lastSelectedSlot?.UpdateLineRendererEnd(clickIndicator.position);
+            selectionHandler.lastSelection?.UpdateLineRendererEnd(clickIndicator.position);
         }
 
         if (Physics.Raycast(ray, out hit, 1000, layerMask))

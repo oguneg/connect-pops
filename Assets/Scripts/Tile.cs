@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer image;
     [SerializeField] private TMPro.TextMeshPro valueText;
     private int value;
+    public int Value => value;
 
     public void AssignData(TileData data)
     {

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8545330687434107154}
   - component: {fileID: 8545330687434107157}
   - component: {fileID: 8545330687434107158}
+  - component: {fileID: 5693281332576374854}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -95,4 +96,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   clickIndicator: {fileID: 0}
+  selectionHandler: {fileID: 5693281332576374854}
   CanGetInput: 1
+  selection: []
+--- !u!114 &5693281332576374854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8545330687434107155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd352cdf03e51a408f2a48cefbf098c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selection: []
+  selectionValue: 0
+  selectionLength: 0

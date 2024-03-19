@@ -8,6 +8,9 @@ public class Slot : MonoBehaviour
     private Vector2Int pos;
     public Vector2Int Pos => pos;
     public Tile tile;
+    [SerializeField] private LineRenderer lineRenderer;
+    private bool isSelected;
+    public bool IsSelected => isSelected;
 
     public void AssignTile(Tile tile)
     {
@@ -21,8 +24,49 @@ public class Slot : MonoBehaviour
         pos.y = y;
     }
 
+    public void InitializeLineRenderer()
+    {
+        lineRenderer.enabled = false;
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, transform.position);
+    }
+
+    public void SetLineRendererEnd(Slot otherSlot)
+    {
+        //lineRenderer.enabled = true;
+        lineRenderer.SetPosition(1, otherSlot.transform.position);
+    }
+
+    public void UpdateLineRendererEnd(Vector3 pos)
+    {
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(1, pos);
+    }
+
+    public void HideLineRenderer()
+    {
+        lineRenderer.enabled = false;
+        lineRenderer.SetPosition(1, transform.position);
+    }
+
     public void Select()
     {
-        tile.transform.DOScale(1.1f,0.2f).SetRelative().SetEase(Ease.OutBack);
+        isSelected = true;
+        tile.transform.DOScale(tile.transform.localScale / 1.5f, 0.2f).SetEase(Ease.OutBack);
+    }
+
+    public void Deselect()
+    {
+        isSelected = false;
+        tile.transform.DOScale(tile.transform.localScale * 1.5f, 0.2f).SetEase(Ease.InBack);
+    }
+
+    public bool IsNeighborOf(Vector2Int otherPos)
+    {
+        bool result = true;
+        if (Mathf.Abs(otherPos.x - pos.x) > 1 || Mathf.Abs(otherPos.y - pos.y) > 1) result = false;
+        if (otherPos == pos) result = false;
+        return result;
     }
 }

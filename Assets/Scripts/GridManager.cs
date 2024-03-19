@@ -41,6 +41,7 @@ public class GridManager : MonoSingleton<GridManager>
         slot.AssignPos(x, y);
         slot.gameObject.name = $"Slot{x}x{y}";
         slot.transform.position = new Vector3(x, y, 0);
+        slot.InitializeLineRenderer();
     }
     private void FillGrid()
     {
