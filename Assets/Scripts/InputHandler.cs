@@ -7,7 +7,7 @@ public class InputHandler : MonoSingleton<InputHandler>
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private Transform clickIndicator;
-    //private Slot lastSelectedSlot => tileManager.LastSlot;
+    private Slot lastSelectedSlot;
     private bool isDragging;
     private TileManager tileManager;
     public bool CanGetInput = true;
@@ -40,25 +40,27 @@ public class InputHandler : MonoSingleton<InputHandler>
 
     private void StartSelection()
     {
-        /*
+        Debug.LogError("hey");
         var slot = Detect();
-        if (slot != null && slot.hasTile)
+        if (slot != null)
         {
+        Debug.LogError("hoo");
             isDragging = true;
             slot.Select();
         }
-        */
+        
     }
 
     private void Drag()
     {
-        /*
+        Debug.LogError("nej");
         var slot = Detect();
-        if (slot != null && slot.hasTile)
+        if (slot != null)
         {
+        Debug.LogError("noo");
             slot.Select();
         }
-        */
+        
     }
 
     private void EndSelection()
@@ -68,24 +70,24 @@ public class InputHandler : MonoSingleton<InputHandler>
 
     private Slot Detect()
     {
-        /*
+        
         var pos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 3);
         Ray ray = mainCamera.ScreenPointToRay(pos);
         RaycastHit hit;
 
-        if (tileManager.CanSelect)
+        //if (tileManager.CanSelect)
         {
             var indicatorPos = mainCamera.ScreenToWorldPoint(pos);
             indicatorPos.z = 0;
             clickIndicator.position = indicatorPos;
-            lastSelectedSlot?.UpdateLineRendererEnd(clickIndicator.position);
+            //lastSelectedSlot?.UpdateLineRendererEnd(clickIndicator.position);
         }
 
         if (Physics.Raycast(ray, out hit, 1000, layerMask))
         {
             return hit.collider.GetComponent<Slot>();
         }
-        */
+        
         return null;
     }
 }
