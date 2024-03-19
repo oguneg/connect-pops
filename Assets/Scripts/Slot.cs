@@ -26,7 +26,7 @@ public class Slot : MonoBehaviour
 
     public void InitializeLineRenderer()
     {
-        lineRenderer.enabled = false;
+        //lineRenderer.enabled = false;
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, transform.position);

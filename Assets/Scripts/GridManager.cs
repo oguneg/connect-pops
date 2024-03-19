@@ -33,6 +33,10 @@ public class GridManager : MonoSingleton<GridManager>
         }
         slotCount = gridSize.x * gridSize.y;
         gridParent.transform.position = new Vector3((gridSize.x - 1) * -0.5f, 5.5f - gridSize.y, -.5f);
+        foreach(var element in grid)
+        {
+            element.InitializeLineRenderer();
+        }
     }
     private void SpawnSlot(int x, int y)
     {
@@ -41,7 +45,7 @@ public class GridManager : MonoSingleton<GridManager>
         slot.AssignPos(x, y);
         slot.gameObject.name = $"Slot{x}x{y}";
         slot.transform.position = new Vector3(x, y, 0);
-        slot.InitializeLineRenderer();
+        //slot.InitializeLineRenderer();
     }
     private void FillGrid()
     {
