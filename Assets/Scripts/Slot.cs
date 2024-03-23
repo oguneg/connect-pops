@@ -15,8 +15,13 @@ public class Slot : MonoBehaviour
     public void AssignTile(Tile tile)
     {
         this.tile = tile;
-        tile.transform.position = transform.position;
-        SetLineRendererColor();
+        tile.transform.SetParent(transform);
+        tile.transform.localPosition = Vector3.zero;
+    }
+
+    public void ClearTile()
+    {
+        tile = null;
     }
 
     public void AssignPos(int x, int y)
@@ -27,7 +32,6 @@ public class Slot : MonoBehaviour
 
     public void InitializeLineRenderer()
     {
-        //lineRenderer.enabled = false;
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, transform.position);
@@ -35,19 +39,13 @@ public class Slot : MonoBehaviour
 
     public void SetLineRendererEnd(Slot otherSlot)
     {
-        //lineRenderer.enabled = true;
+        lineRenderer.enabled = true;
         lineRenderer.SetPosition(1, otherSlot.transform.position);
     }
 
-    public void UpdateLineRendererEnd(Vector3 pos)
+    public void SetLineRendererColor(Color color)
     {
-        lineRenderer.enabled = true;
-        lineRenderer.SetPosition(1, pos);
-    }
-
-    public void SetLineRendererColor()
-    {
-        lineRenderer.startColor = lineRenderer.endColor = tile.GetColor();
+        lineRenderer.startColor = lineRenderer.endColor = color;
     }
 
     public void HideLineRenderer()

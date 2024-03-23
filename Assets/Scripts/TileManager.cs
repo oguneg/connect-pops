@@ -8,6 +8,8 @@ public class TileManager : MonoSingleton<TileManager>
     [SerializeField] private TilePool tilePool;
     private TileData[] tileData;
     private Color[] pallette;
+    [SerializeField] private Tile sumIndicator;
+
     public void Initialize(Color[] pallette)
     {
         this.pallette = pallette;
@@ -17,15 +19,31 @@ public class TileManager : MonoSingleton<TileManager>
     public Tile SpawnTile(int value)
     {
         var tile = tilePool.GetTile();
+        tile.gameObject.SetActive(true);
         tile.AssignData(tileData[value]);
         return tile;
     }
 
     public void IncreaseTileValue(Tile tile)
     {
-        tile.IncreaseValue(tileData[tile.Value + 1]);
+        tile.IncreaseValue(tileData[sumIndicator.Value]);
     }
 
+    public void SetSumIndicatorValue(int value)
+    {
+        if (sumIndicator.Value != value)
+            sumIndicator.AssignData(tileData[value]);
+    }
+
+    public void SetSumIndicatorStatus(bool status)
+    {
+        sumIndicator.gameObject.SetActive(status);
+    }
+
+    public void DeactivateTile(Tile tile)
+    {
+        tilePool.DeactivateTile(tile);
+    }
 
     public void GenerateTileData()
     {

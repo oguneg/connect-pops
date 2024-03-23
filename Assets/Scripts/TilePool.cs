@@ -27,4 +27,9 @@ public class TilePool : MonoBehaviour
         var tile = Instantiate(tilePrefab);
         return tile;
     }
+
+    public void DeactivateTile(Tile tile)
+    {
+        inactiveTiles.Add(tile);
+    }
 }

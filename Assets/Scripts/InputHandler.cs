@@ -66,7 +66,6 @@ public class InputHandler : MonoSingleton<InputHandler>
 
     private Slot Detect()
     {
-
         var pos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 3);
         Ray ray = mainCamera.ScreenPointToRay(pos);
         RaycastHit hit;
