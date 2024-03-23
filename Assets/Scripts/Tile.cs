@@ -30,6 +30,8 @@ public class Tile : MonoBehaviour
         DOVirtual.DelayedCall(mergeDuration, () =>
         {
             AssignData(data);
+            transform.DOScale(1.3f, 0.15f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InOutSine);
+            AudioManager.instance.PlayMerge();
             GridManager.instance.RecalculateGrid();
         });
     }

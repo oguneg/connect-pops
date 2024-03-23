@@ -8,6 +8,7 @@ public class SelectionHandler : MonoBehaviour
     public int selectionValue;
     public int selectionLength;
     public Slot lastSelection => selectionLength == 0 ? null : selection[selectionLength - 1];
+    [SerializeField] private AudioManager audioManager;
     [SerializeField] private TileManager tileManager;
 
     public void Select(Slot slot)
@@ -35,6 +36,7 @@ public class SelectionHandler : MonoBehaviour
                     lastSelection.Deselect();
                     selection.Remove(lastSelection);
                     selectionLength--;
+                    audioManager.PlayPop(selectionLength);
                     lastSelection?.HideLineRenderer();
                     CalculateSelectionValue();
                     return;
@@ -46,6 +48,7 @@ public class SelectionHandler : MonoBehaviour
         lastSelection?.SetLineRendererEnd(slot);
         selection.Add(slot);
         selectionLength++;
+        audioManager.PlayPop(selectionLength);
         slot.Select();
         CalculateSelectionValue();
     }
