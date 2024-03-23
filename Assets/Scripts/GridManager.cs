@@ -62,31 +62,55 @@ public class GridManager : MonoSingleton<GridManager>
     public void RecalculateGrid()
     {
         HandleVerticalSpaces();
+        FillEmptySlots();
     }
 
     private void HandleVerticalSpaces()
     {
-        Debug.Log("HERE, SUMMING");
+       // Debug.Log("HERE, SUMMING");
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
                 var bottomSlot = grid[x, y];
-                Debug.Log($"bottom {x}x{y}");
+                //Debug.Log($"bottom {x}x{y}");
 
                 if (bottomSlot.tile == null)
                 {
                     for (int i = y + 1; i < gridSize.y; i++)
                     {
                         var topSlot = grid[x, i];
-                        Debug.Log($"top {x}x{i}");
+                        //Debug.Log($"top {x}x{i}");
                         if (topSlot.tile != null)
                         {
-                            Debug.Log($"moving {topSlot.tile.Value} from {x}x{i} -> {x}x{y}");
+                            //Debug.Log($"moving {topSlot.tile.Value} from {x}x{i} -> {x}x{y}");
                             topSlot.TransferTile(bottomSlot);
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+    private void FillEmptySlots()
+    {
+        StartCoroutine(FillEmptySlotsAsync());
+    }
+
+    private IEnumerator FillEmptySlotsAsync()
+    {
+        yield return new WaitForSeconds(0.3f);
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                var slot = grid[x, y];
+                if (slot.tile == null)
+                {
+                    var tile = tileManager.SpawnTile(Random.Range(0, 3));
+                    slot.AssignTile(tile);
+                    tile.AssignToSlot(slot);
+                    yield return new WaitForSeconds(0.05f);
                 }
             }
         }

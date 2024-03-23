@@ -21,6 +21,10 @@ public class SelectionHandler : MonoBehaviour
         {
             return;
         }
+        else if (!slot.IsNeighborOf(lastSelection.Pos))
+        {
+            return;
+        }
 
         if (slot.IsSelected)
         {

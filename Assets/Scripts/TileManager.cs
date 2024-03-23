@@ -27,7 +27,6 @@ public class TileManager : MonoSingleton<TileManager>
     public void IncreaseTileValue(Tile tile)
     {
         tile.IncreaseValue(tileData[sumIndicator.Value]);
-        GridManager.instance.RecalculateGrid();
     }
 
     public void SetSumIndicatorValue(int value)

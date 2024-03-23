@@ -24,11 +24,7 @@ public class InputHandler : MonoSingleton<InputHandler>
 
     private void HandleInput()
     {
-        if (Input.GetMouseButtonDown(0) && CanGetInput)
-        {
-            StartSelection();
-        }
-        else if (isDragging && Input.GetMouseButton(0) && CanGetInput)
+        if (Input.GetMouseButton(0) && CanGetInput)
         {
             Drag();
         }
@@ -38,24 +34,12 @@ public class InputHandler : MonoSingleton<InputHandler>
         }
     }
 
-    private void StartSelection()
-    {
-        var slot = Detect();
-        if (slot != null && slot.tile != null)
-        {
-            isDragging = true;
-            lastSelectedSlot = slot;
-            selectionHandler.Select(slot);
-        }
-    }
-
     private void Drag()
     {
         var slot = Detect();
         if (slot != null && slot.tile != null)
         {
-            if (selectionHandler.lastSelection.IsNeighborOf(slot.Pos))
-                selectionHandler.Select(slot);
+            selectionHandler.Select(slot);
         }
     }
 

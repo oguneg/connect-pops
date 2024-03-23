@@ -28,7 +28,10 @@ public class Tile : MonoBehaviour
     public void IncreaseValue(TileData data)
     {
         DOVirtual.DelayedCall(mergeDuration, () =>
-        AssignData(data));
+        {
+            AssignData(data);
+            GridManager.instance.RecalculateGrid();
+        });
     }
 
     public void MergeInto(Slot slot)
@@ -42,6 +45,7 @@ public class Tile : MonoBehaviour
     {
         currentSlot?.ClearTile();
         TileManager.instance.DeactivateTile(this);
+        transform.localScale = Vector3.one;
         gameObject.SetActive(false);
         valueText.alpha = 1;
     }
