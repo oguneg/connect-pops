@@ -51,7 +51,7 @@ public class GameManager : MonoSingleton<GameManager>
         gameData = new int[slotCount];
         for (int i = 0; i < slotCount; i++)
         {
-            gameData[i] = Random.Range(0, 2);
+            gameData[i] = Random.Range(0, 4);
         }
         DataHandler.SaveGameData(gameData);
     }

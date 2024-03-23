@@ -33,7 +33,7 @@ public class GridManager : MonoSingleton<GridManager>
         }
         slotCount = gridSize.x * gridSize.y;
         gridParent.transform.position = new Vector3((gridSize.x - 1) * -0.5f, 5.5f - gridSize.y, -.5f);
-        foreach(var element in grid)
+        foreach (var element in grid)
         {
             element.InitializeLineRenderer();
         }
@@ -52,15 +52,43 @@ public class GridManager : MonoSingleton<GridManager>
         {
             for (int x = 0; x < gridSize.x; x++)
             {
-                var tile = tileManager.SpawnTile(gameData[y*gridSize.y + x]);
-                tile.AssignToSlot(grid[x,y]);
-                grid[x,y].AssignTile(tile);
+                var tile = tileManager.SpawnTile(gameData[y * gridSize.y + x]);
+                tile.AssignToSlot(grid[x, y]);
+                grid[x, y].AssignTile(tile);
             }
         }
     }
 
-    private void RecalculateGrid()
+    public void RecalculateGrid()
     {
+        HandleVerticalSpaces();
+    }
 
+    private void HandleVerticalSpaces()
+    {
+        Debug.Log("HERE, SUMMING");
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                var bottomSlot = grid[x, y];
+                Debug.Log($"bottom {x}x{y}");
+
+                if (bottomSlot.tile == null)
+                {
+                    for (int i = y + 1; i < gridSize.y; i++)
+                    {
+                        var topSlot = grid[x, i];
+                        Debug.Log($"top {x}x{i}");
+                        if (topSlot.tile != null)
+                        {
+                            Debug.Log($"moving {topSlot.tile.Value} from {x}x{i} -> {x}x{y}");
+                            topSlot.TransferTile(bottomSlot);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

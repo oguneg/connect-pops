@@ -33,12 +33,14 @@ public class Tile : MonoBehaviour
 
     public void MergeInto(Slot slot)
     {
+        currentSlot?.ClearTile();
         transform.DOMove(slot.transform.position, mergeDuration).SetEase(Ease.InOutSine).OnComplete(Cleanup);
         valueText.DOFade(0, mergeDuration / 2f);
     }
 
     public void Cleanup()
     {
+        currentSlot?.ClearTile();
         TileManager.instance.DeactivateTile(this);
         gameObject.SetActive(false);
         valueText.alpha = 1;

@@ -41,7 +41,7 @@ public class InputHandler : MonoSingleton<InputHandler>
     private void StartSelection()
     {
         var slot = Detect();
-        if (slot != null)
+        if (slot != null && slot.tile != null)
         {
             isDragging = true;
             lastSelectedSlot = slot;
@@ -52,7 +52,7 @@ public class InputHandler : MonoSingleton<InputHandler>
     private void Drag()
     {
         var slot = Detect();
-        if (slot != null)
+        if (slot != null && slot.tile != null)
         {
             if (selectionHandler.lastSelection.IsNeighborOf(slot.Pos))
                 selectionHandler.Select(slot);

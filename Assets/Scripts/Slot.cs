@@ -12,16 +12,29 @@ public class Slot : MonoBehaviour
     private bool isSelected;
     public bool IsSelected => isSelected;
 
-    public void AssignTile(Tile tile)
+    public void AssignTile(Tile tile, bool isInstant = true)
     {
         this.tile = tile;
         tile.transform.SetParent(transform);
-        tile.transform.localPosition = Vector3.zero;
+        if (isInstant)
+        {
+            tile.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            tile.transform.DOLocalMove(Vector3.zero, 0.2f);
+        }
     }
 
     public void ClearTile()
     {
         tile = null;
+    }
+
+    public void TransferTile(Slot target)
+    {
+        target.AssignTile(tile, false);
+        ClearTile();
     }
 
     public void AssignPos(int x, int y)
@@ -63,7 +76,7 @@ public class Slot : MonoBehaviour
     public void Deselect()
     {
         isSelected = false;
-        tile.transform.DOScale(tile.transform.localScale / 1.15f, 0.1f).SetEase(Ease.InBack);
+        tile?.transform.DOScale(tile.transform.localScale / 1.15f, 0.1f).SetEase(Ease.InBack);
         HideLineRenderer();
     }
 
