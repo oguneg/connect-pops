@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,9 @@ public class TileManager : MonoSingleton<TileManager>
     public Tile SpawnTile(int value)
     {
         var tile = tilePool.GetTile();
+        tile.transform.localScale = Vector3.zero;
         tile.gameObject.SetActive(true);
+        tile.transform.DOScale(1f, 0.2f).SetDelay(UnityEngine.Random.Range(0, 0.2f)).SetEase(Ease.OutBack);
         tile.AssignData(tileData[value]);
         return tile;
     }

@@ -119,7 +119,7 @@ public class GridManager : MonoSingleton<GridManager>
 
     private IEnumerator FillEmptySlotsAsync()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -130,7 +130,6 @@ public class GridManager : MonoSingleton<GridManager>
                     var tile = tileManager.SpawnTile(Random.Range(0, 3));
                     slot.AssignTile(tile);
                     tile.AssignToSlot(slot);
-                    yield return new WaitForSeconds(0.05f);
                 }
             }
         }
