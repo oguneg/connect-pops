@@ -67,7 +67,7 @@ public class GridManager : MonoSingleton<GridManager>
 
     private void HandleVerticalSpaces()
     {
-       // Debug.Log("HERE, SUMMING");
+        // Debug.Log("HERE, SUMMING");
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -95,6 +95,26 @@ public class GridManager : MonoSingleton<GridManager>
     private void FillEmptySlots()
     {
         StartCoroutine(FillEmptySlotsAsync());
+    }
+
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (!focus)
+            SaveData();
+    }
+
+    private void SaveData()
+    {
+        gameData = new int[gridSize.x * gridSize.y];
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                gameData[y * gridSize.y + x] = grid[x, y].tile.Value;
+            }
+        }
+        DataHandler.SaveGameData(gameData);
     }
 
     private IEnumerator FillEmptySlotsAsync()

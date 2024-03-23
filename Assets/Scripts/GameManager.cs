@@ -64,4 +64,10 @@ public class GameManager : MonoSingleton<GameManager>
         }
         slotCount = gridSize.x * gridSize.y;
     }
+
+    public void ClearAndReset()
+    {
+        PlayerPrefs.DeleteAll();
+        Application.LoadLevel(0);
+    }
 }
