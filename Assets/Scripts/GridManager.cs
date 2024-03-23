@@ -11,7 +11,7 @@ public class GridManager : MonoSingleton<GridManager>
     private TileManager tileManager;
     private int slotCount;
     private int[] gameData;
-
+    private Coroutine recalculateRoutine;
     public void Initialize(int[] data)
     {
         gameData = data;
@@ -52,13 +52,12 @@ public class GridManager : MonoSingleton<GridManager>
         {
             for (int x = 0; x < gridSize.x; x++)
             {
-                var tile = tileManager.SpawnTile(gameData[y * gridSize.y + x]);
+                var tile = tileManager.SpawnTile(gameData[y * gridSize.y + x], true);
                 tile.AssignToSlot(grid[x, y]);
                 grid[x, y].AssignTile(tile);
             }
         }
     }
-
     public void RecalculateGrid()
     {
         HandleVerticalSpaces();
@@ -94,9 +93,20 @@ public class GridManager : MonoSingleton<GridManager>
     }
     private void FillEmptySlots()
     {
-        StartCoroutine(FillEmptySlotsAsync());
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                var slot = grid[x, y];
+                if (slot.tile == null)
+                {
+                    var tile = tileManager.SpawnTile(Random.Range(0, 3));
+                    slot.AssignTile(tile);
+                    tile.AssignToSlot(slot);
+                }
+            }
+        }
     }
-
 
     private void OnApplicationFocus(bool focus)
     {
@@ -115,23 +125,5 @@ public class GridManager : MonoSingleton<GridManager>
             }
         }
         DataHandler.SaveGameData(gameData);
-    }
-
-    private IEnumerator FillEmptySlotsAsync()
-    {
-        yield return new WaitForSeconds(0.5f);
-        for (int x = 0; x < gridSize.x; x++)
-        {
-            for (int y = 0; y < gridSize.y; y++)
-            {
-                var slot = grid[x, y];
-                if (slot.tile == null)
-                {
-                    var tile = tileManager.SpawnTile(Random.Range(0, 3));
-                    slot.AssignTile(tile);
-                    tile.AssignToSlot(slot);
-                }
-            }
-        }
     }
 }

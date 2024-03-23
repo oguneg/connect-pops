@@ -10,6 +10,7 @@ public class SelectionHandler : MonoBehaviour
     public Slot lastSelection => selectionLength == 0 ? null : selection[selectionLength - 1];
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private TileManager tileManager;
+    private int activeMergeCount;
 
     public void Select(Slot slot)
     {
@@ -85,8 +86,19 @@ public class SelectionHandler : MonoBehaviour
             selection[i].Deselect();
         }
         last.Deselect();
+        activeMergeCount++;
+        last.tile.OnMergeComplete += OnMergeComplete;
         TileManager.instance.IncreaseTileValue(last.tile);
     }
+
+    private void OnMergeComplete(Tile tile)
+    {
+        activeMergeCount--;
+        tile.OnMergeComplete = null;
+        AudioManager.instance.PlayMerge();
+        GridManager.instance.RecalculateGrid();
+    }
+
     private void CalculateSelectionValue()
     {
         var log = Mathf.FloorToInt(Mathf.Log(selectionLength, 2));

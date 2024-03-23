@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Events;
+
 public class Tile : MonoBehaviour
 {
     private const float mergeDuration = 0.2f;
@@ -11,11 +13,22 @@ public class Tile : MonoBehaviour
     private int value;
     public int Value => value;
     private Slot currentSlot;
+    public UnityAction<Tile> OnMergeComplete;
 
     public void AssignToSlot(Slot slot)
     {
         currentSlot = slot;
         currentSlot.SetLineRendererColor(image.color);
+
+        var tiles = GameObject.FindObjectsOfType<Tile>();
+        foreach (var element in tiles)
+        {
+            if (element != this && element.currentSlot == slot)
+            {
+                Debug.LogError($"ANOMALY", this);
+                //Debug.Break();
+            }
+        }
     }
 
     public void AssignData(TileData data)
@@ -24,11 +37,6 @@ public class Tile : MonoBehaviour
         image.color = data.color;
         valueText.text = data.valueString;
         currentSlot?.SetLineRendererColor(image.color);
-    }
-
-    public void FallToSlot()
-    {
-
     }
 
     public void Squish()
@@ -42,8 +50,7 @@ public class Tile : MonoBehaviour
         {
             AssignData(data);
             transform.DOScale(1.3f, 0.15f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InOutSine);
-            AudioManager.instance.PlayMerge();
-            GridManager.instance.RecalculateGrid();
+            OnMergeComplete?.Invoke(this);
         });
     }
 

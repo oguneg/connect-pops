@@ -17,12 +17,19 @@ public class TileManager : MonoSingleton<TileManager>
         GenerateTileData();
     }
 
-    public Tile SpawnTile(int value)
+    public Tile SpawnTile(int value, bool isFirstSpawn = false)
     {
         var tile = tilePool.GetTile();
         tile.transform.localScale = Vector3.zero;
         tile.gameObject.SetActive(true);
-        tile.transform.DOScale(1f, 0.2f).SetDelay(UnityEngine.Random.Range(0, 0.2f)).SetEase(Ease.OutBack);
+        if (isFirstSpawn)
+        {
+            tile.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            tile.transform.DOScale(1f, 0.2f).SetDelay(UnityEngine.Random.Range(0.7f, 0.8f)).SetEase(Ease.OutBack);
+        }
         tile.AssignData(tileData[value]);
         return tile;
     }
