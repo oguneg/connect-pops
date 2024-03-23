@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour
     private const float mergeDuration = 0.2f;
     [SerializeField] private SpriteRenderer image;
     [SerializeField] private TMPro.TextMeshPro valueText;
+    [SerializeField] private Transform visual;
     private int value;
     public int Value => value;
     private Slot currentSlot;
@@ -23,6 +24,16 @@ public class Tile : MonoBehaviour
         image.color = data.color;
         valueText.text = data.valueString;
         currentSlot?.SetLineRendererColor(image.color);
+    }
+
+    public void FallToSlot()
+    {
+
+    }
+
+    public void Squish()
+    {
+        visual.DOScaleY(0.8f, 0.1f).SetLoops(2, LoopType.Yoyo);
     }
 
     public void IncreaseValue(TileData data)
