@@ -33,8 +33,8 @@ public class Slot : MonoBehaviour
 
     public void TransferTile(Slot target)
     {
-        tile.AssignToSlot(target);
         target.AssignTile(tile, false);
+        tile.AssignToSlot(target);
         ClearTile();
     }
 
@@ -59,13 +59,14 @@ public class Slot : MonoBehaviour
 
     public void SetLineRendererColor(Color color)
     {
-        lineRenderer.startColor = lineRenderer.endColor = color;
+        //lineRenderer.startColor = lineRenderer.endColor = color;
+        lineRenderer.material.color = color;
     }
 
     public void HideLineRenderer()
     {
         lineRenderer.enabled = false;
-        lineRenderer.SetPosition(1, transform.position);
+        //lineRenderer.SetPosition(1, transform.position);
     }
 
     public void Select()

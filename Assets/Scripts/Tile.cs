@@ -44,6 +44,7 @@ public class Tile : MonoBehaviour
     public void Cleanup()
     {
         currentSlot?.ClearTile();
+        currentSlot = null;
         TileManager.instance.DeactivateTile(this);
         transform.localScale = Vector3.one;
         gameObject.SetActive(false);
