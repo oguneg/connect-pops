@@ -21,6 +21,11 @@ public class TileManager : MonoSingleton<TileManager>
         return tile;
     }
 
+    public void IncreaseTileValue(Tile tile)
+    {
+        tile.IncreaseValue(tileData[tile.Value + 1]);
+    }
+
 
     public void GenerateTileData()
     {

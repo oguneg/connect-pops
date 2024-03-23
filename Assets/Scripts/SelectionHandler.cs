@@ -15,6 +15,10 @@ public class SelectionHandler : MonoBehaviour
         {
             selectionValue = slot.tile.Value;
         }
+        else if (slot.tile.Value != selectionValue)
+        {
+            return;
+        }
 
         if (slot.IsSelected)
         {
@@ -25,12 +29,14 @@ public class SelectionHandler : MonoBehaviour
                     lastSelection.Deselect();
                     selection.Remove(lastSelection);
                     selectionLength--;
+                    lastSelection?.HideLineRenderer();
                     return;
                 }
             }
             return;
         }
 
+        lastSelection?.SetLineRendererEnd(slot);
         selection.Add(slot);
         selectionLength++;
         slot.Select();
@@ -40,10 +46,33 @@ public class SelectionHandler : MonoBehaviour
     {
         if (selectionLength < 2)
         {
-            for (int i = 0; i < selectionLength; i++)
-            {
-                selection[i].Deselect();
-            }
+            DeselectSelection();
         }
+        else
+        {
+            MergeSelection();
+        }
+        selection.Clear();
+        selectionLength = 0;
+    }
+
+    private void DeselectSelection()
+    {
+        for (int i = 0; i < selectionLength; i++)
+        {
+            selection[i].Deselect();
+        }
+    }
+
+    private void MergeSelection()
+    {
+        var last = lastSelection;
+        for (int i = 0; i < selectionLength - 1; i++)
+        {
+            selection[i].tile.MergeInto(last);
+            selection[i].Deselect();
+        }
+        last.Deselect();
+        TileManager.instance.IncreaseTileValue(last.tile);
     }
 }

@@ -16,6 +16,7 @@ public class Slot : MonoBehaviour
     {
         this.tile = tile;
         tile.transform.position = transform.position;
+        SetLineRendererColor();
     }
 
     public void AssignPos(int x, int y)
@@ -44,6 +45,11 @@ public class Slot : MonoBehaviour
         lineRenderer.SetPosition(1, pos);
     }
 
+    public void SetLineRendererColor()
+    {
+        lineRenderer.startColor = lineRenderer.endColor = tile.GetColor();
+    }
+
     public void HideLineRenderer()
     {
         lineRenderer.enabled = false;
@@ -53,13 +59,14 @@ public class Slot : MonoBehaviour
     public void Select()
     {
         isSelected = true;
-        tile.transform.DOScale(tile.transform.localScale / 1.5f, 0.2f).SetEase(Ease.OutBack);
+        tile.transform.DOScale(tile.transform.localScale * 1.15f, 0.1f).SetEase(Ease.OutBack);
     }
 
     public void Deselect()
     {
         isSelected = false;
-        tile.transform.DOScale(tile.transform.localScale * 1.5f, 0.2f).SetEase(Ease.InBack);
+        tile.transform.DOScale(tile.transform.localScale / 1.15f, 0.1f).SetEase(Ease.InBack);
+        HideLineRenderer();
     }
 
     public bool IsNeighborOf(Vector2Int otherPos)

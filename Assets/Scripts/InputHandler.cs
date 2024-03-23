@@ -6,7 +6,6 @@ public class InputHandler : MonoSingleton<InputHandler>
 {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layerMask;
-    [SerializeField] private Transform clickIndicator;
     [SerializeField] private SelectionHandler selectionHandler;
     private Slot lastSelectedSlot;
     private bool isDragging;
@@ -55,38 +54,28 @@ public class InputHandler : MonoSingleton<InputHandler>
         var slot = Detect();
         if (slot != null)
         {
-            if(selectionHandler.lastSelection.IsNeighborOf(slot.Pos))
-            selectionHandler.Select(slot);
-            //slot.Select();
+            if (selectionHandler.lastSelection.IsNeighborOf(slot.Pos))
+                selectionHandler.Select(slot);
         }
     }
 
     private void EndSelection()
     {
-        //tileManager.FingerUp();
         selectionHandler.EndSelection();
     }
 
     private Slot Detect()
     {
-        
+
         var pos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 3);
         Ray ray = mainCamera.ScreenPointToRay(pos);
         RaycastHit hit;
-
-        //if (tileManager.CanSelect)
-        {
-            var indicatorPos = mainCamera.ScreenToWorldPoint(pos);
-            indicatorPos.z = 0;
-            clickIndicator.position = indicatorPos;
-            selectionHandler.lastSelection?.UpdateLineRendererEnd(clickIndicator.position);
-        }
 
         if (Physics.Raycast(ray, out hit, 1000, layerMask))
         {
             return hit.collider.GetComponent<Slot>();
         }
-        
+
         return null;
     }
 }
