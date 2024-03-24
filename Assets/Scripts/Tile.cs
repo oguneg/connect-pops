@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class Tile : MonoBehaviour
 {
     private const float mergeDuration = 0.2f;
-    [SerializeField] private SpriteRenderer image;
+    [SerializeField] private SpriteRenderer image, ring;
     [SerializeField] private TMPro.TextMeshPro valueText;
     [SerializeField] private Transform visual;
     private int value;
@@ -19,16 +19,6 @@ public class Tile : MonoBehaviour
     {
         currentSlot = slot;
         currentSlot.SetLineRendererColor(image.color);
-
-        var tiles = GameObject.FindObjectsOfType<Tile>();
-        foreach (var element in tiles)
-        {
-            if (element != this && element.currentSlot == slot)
-            {
-                Debug.LogError($"ANOMALY", this);
-                //Debug.Break();
-            }
-        }
     }
 
     public void AssignData(TileData data)
@@ -36,6 +26,7 @@ public class Tile : MonoBehaviour
         value = data.value;
         image.color = data.color;
         valueText.text = data.valueString;
+        ring.enabled = !data.isEven;
         currentSlot?.SetLineRendererColor(image.color);
     }
 

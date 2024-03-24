@@ -10,6 +10,8 @@ public class TileManager : MonoSingleton<TileManager>
     private TileData[] tileData;
     private Color[] pallette;
     [SerializeField] private Tile sumIndicator;
+    private int highestValue;
+    public int HighestValue => highestValue;
 
     public void Initialize(Color[] pallette)
     {
@@ -19,6 +21,10 @@ public class TileManager : MonoSingleton<TileManager>
 
     public Tile SpawnTile(int value, bool isFirstSpawn = false)
     {
+        if (value > highestValue)
+        {
+            highestValue = value;
+        }
         var tile = tilePool.GetTile();
         tile.transform.localScale = Vector3.zero;
         tile.gameObject.SetActive(true);
@@ -28,7 +34,7 @@ public class TileManager : MonoSingleton<TileManager>
         }
         else
         {
-            tile.transform.DOScale(1f, 0.2f).SetDelay(UnityEngine.Random.Range(0.7f, 0.8f)).SetEase(Ease.OutBack);
+            tile.transform.DOScale(1f, 0.25f).SetDelay(UnityEngine.Random.Range(0.45f, 0.55f)).SetEase(Ease.OutBack);
         }
         tile.AssignData(tileData[value]);
         return tile;
@@ -37,6 +43,10 @@ public class TileManager : MonoSingleton<TileManager>
     public void IncreaseTileValue(Tile tile)
     {
         tile.IncreaseValue(tileData[sumIndicator.Value]);
+        if(sumIndicator.Value > highestValue)
+        {
+            highestValue = sumIndicator.Value;
+        }
     }
 
     public void SetSumIndicatorValue(int value)

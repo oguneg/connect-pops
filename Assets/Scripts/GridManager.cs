@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridManager : MonoSingleton<GridManager>
 {
+    private const int highestSpawnValueOffset = 4;
     private Slot[,] grid;
     private Vector2Int gridSize;
     [SerializeField] private Transform gridParent;
@@ -11,7 +12,6 @@ public class GridManager : MonoSingleton<GridManager>
     private TileManager tileManager;
     private int slotCount;
     private int[] gameData;
-    private Coroutine recalculateRoutine;
     public void Initialize(int[] data)
     {
         gameData = data;
@@ -66,23 +66,19 @@ public class GridManager : MonoSingleton<GridManager>
 
     private void HandleVerticalSpaces()
     {
-        // Debug.Log("HERE, SUMMING");
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
                 var bottomSlot = grid[x, y];
-                //Debug.Log($"bottom {x}x{y}");
 
                 if (bottomSlot.tile == null)
                 {
                     for (int i = y + 1; i < gridSize.y; i++)
                     {
                         var topSlot = grid[x, i];
-                        //Debug.Log($"top {x}x{i}");
                         if (topSlot.tile != null)
                         {
-                            //Debug.Log($"moving {topSlot.tile.Value} from {x}x{i} -> {x}x{y}");
                             topSlot.TransferTile(bottomSlot);
                             break;
                         }
@@ -93,6 +89,7 @@ public class GridManager : MonoSingleton<GridManager>
     }
     private void FillEmptySlots()
     {
+        var highCap = Mathf.Max(tileManager.HighestValue - highestSpawnValueOffset, 3);
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -100,7 +97,7 @@ public class GridManager : MonoSingleton<GridManager>
                 var slot = grid[x, y];
                 if (slot.tile == null)
                 {
-                    var tile = tileManager.SpawnTile(Random.Range(0, 3));
+                    var tile = tileManager.SpawnTile(Random.Range(0, highCap));
                     slot.AssignTile(tile);
                     tile.AssignToSlot(slot);
                 }
