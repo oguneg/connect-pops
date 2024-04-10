@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridManager : MonoSingleton<GridManager>
 {
-    private const int highestSpawnValueOffset = 4;
+    private const int highestSpawnValueOffset = 3;
     private Slot[,] grid;
     private Vector2Int gridSize;
     [SerializeField] private Transform gridParent;
@@ -12,6 +12,7 @@ public class GridManager : MonoSingleton<GridManager>
     private TileManager tileManager;
     private int slotCount;
     private int[] gameData;
+    private int highCap;
     public void Initialize(int[] data)
     {
         gameData = data;
@@ -89,7 +90,9 @@ public class GridManager : MonoSingleton<GridManager>
     }
     private void FillEmptySlots()
     {
-        var highCap = Mathf.Max(tileManager.HighestValue - highestSpawnValueOffset, 3);
+        highCap = Mathf.Max(tileManager.HighestValue - highestSpawnValueOffset, 4);
+        bool willEnsureMatch = !HasMatches();
+
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -97,12 +100,88 @@ public class GridManager : MonoSingleton<GridManager>
                 var slot = grid[x, y];
                 if (slot.tile == null)
                 {
-                    var tile = tileManager.SpawnTile(Random.Range(0, highCap));
+                    var tile = tileManager.SpawnTile(willEnsureMatch ? GetNeighborValue(x, y) : RandomValue);
                     slot.AssignTile(tile);
                     tile.AssignToSlot(slot);
+                    willEnsureMatch = false;
                 }
             }
         }
+    }
+
+    private int RandomValue
+    {
+        get
+        {
+            return Random.Range(0, highCap);
+        }
+    }
+
+    private bool HasMatches()
+    {
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                if (HasMatchingNeighbor(x, y))
+                {
+                    return true;
+                }
+            }
+        }
+        Debug.Log($"no valid moves, ensured a match");
+        return false;
+    }
+
+    private bool HasMatchingNeighbor(int x, int y)
+    {
+        if (grid[x, y].tile == null) return false;
+        var value = grid[x, y].tile.Value;
+        var neighbors = GetNeighbors(x, y);
+
+        foreach (var element in neighbors)
+        {
+            if (element.tile != null && element.tile.Value == value)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int GetNeighborValue(int x, int y)
+    {
+        return GetNeighbors(x, y).GetRandom().tile.Value;
+    }
+
+    private List<Slot> GetNeighbors(int x, int y)
+    {
+        List<Slot> validNeighbors = new List<Slot>();
+        if (x < gridSize.x - 1)
+        {
+            if (grid[x + 1, y].tile)
+                validNeighbors.Add(grid[x + 1, y]);
+
+            if (y > 0)
+            {
+                if (grid[x + 1, y - 1].tile)
+                    validNeighbors.Add(grid[x + 1, y - 1]);
+            }
+
+            if (y < gridSize.y - 1)
+            {
+                if (grid[x + 1, y + 1].tile)
+                    validNeighbors.Add(grid[x + 1, y + 1]);
+                if (grid[x, y + 1].tile)
+                    validNeighbors.Add(grid[x, y + 1]);
+            }
+        }
+        else if (y < gridSize.y - 1)
+        {
+            if (grid[x, y + 1].tile)
+                validNeighbors.Add(grid[x, y + 1]);
+        }
+        return validNeighbors;
     }
 
     private void OnApplicationFocus(bool focus)

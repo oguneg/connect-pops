@@ -22,7 +22,7 @@ public class Slot : MonoBehaviour
         }
         else
         {
-            tile.transform.DOLocalMove(Vector3.zero, 0.2f).SetDelay(0.33f).OnComplete(()=>tile.Squish());
+            tile.transform.DOLocalMove(Vector3.zero, 6).SetSpeedBased().SetEase(Ease.InCirc).SetDelay(Random.Range(0.08f, 0.12f)).OnComplete(() => tile.Squish());
         }
     }
 
